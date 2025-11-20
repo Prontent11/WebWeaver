@@ -1,0 +1,17 @@
+# This is a config for E2B sandbox template.
+# You can use template ID (cmqxiif37iv9m0a7okz5) or template name (webweaver-test-template2) to create a sandbox:
+
+# Python SDK
+# from e2b import Sandbox, AsyncSandbox
+# sandbox = Sandbox.create("webweaver-test-template2") # Sync sandbox
+# sandbox = await AsyncSandbox.create("webweaver-test-template2") # Async sandbox
+
+# JS SDK
+# import { Sandbox } from 'e2b'
+# const sandbox = await Sandbox.create('webweaver-test-template2')
+
+team_id = "6a7febf9-4151-478a-852e-c0776772f04f"
+start_cmd = "/compile_page.sh"
+dockerfile = "e2b.Dockerfile"
+template_name = "webweaver-test-template2"
+template_id = "cmqxiif37iv9m0a7okz5"

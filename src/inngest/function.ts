@@ -1,19 +1,33 @@
 import { inngest } from "./client";
+import {Sandbox} from '@e2b/code-interpreter'
 import {
   createAgent,
   openai,
 } from "@inngest/agent-kit";
+import { getSandbox } from "./utils";
 export const helloWorld = inngest.createFunction(
   { id: "hello-world" },
   { event: "test/hello.world" },
   async ({ event, step }) => {
-    // await step.sleep("wait-a-moment", "5s");
-    const summarizer = createAgent({
-  model: openai({model: "gpt-4o"}),
-  name: "Summarizer",
-  system: "You are an expert at summarizing text concisely in 2 words.",
-});
-    const {output} = await summarizer.run(`Summarize this: ${event.data.value}`);
-    return { output };
+    const sandboxId = await step.run("get-sandbox-id", async () => {
+      // Simulate fetching a sandbox ID
+      const sandbox=await Sandbox.create("webweaver-test-template2")
+      return sandbox.sandboxId
+    });
+
+
+
+  const codeAgent = createAgent({
+      name:"Code-agent",
+      system:"You are an exper nextjs developer. You write readable & maintainable code. You write simple Next.js & React snippets.",
+      model:openai({model:"gpt-4o"}),});
+
+    const {output} = await codeAgent.run(`Write the following snippet: ${event.data.value}`);
+    const sandboxUrl= await step.run("get-sandbox-url", async () => {
+      const sandbox = await getSandbox(sandboxId);
+      const host =sandbox.getHost(3000);
+      return `https://${host}`;
+    });
+    return { output,sandboxUrl };
   },
 );
